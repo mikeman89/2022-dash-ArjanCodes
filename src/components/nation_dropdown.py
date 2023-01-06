@@ -27,6 +27,7 @@ def render(app: Dash) -> html.Div:
                 className="dropdown-button",
                 children=["Select All"],
                 id=ids.SELECT_ALL_NATIONS_BUTTON,
+                n_clicks=0,
             ),
         ]
     )
