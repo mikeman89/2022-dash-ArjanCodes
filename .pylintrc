@@ -1,0 +1,6 @@
+[MASTER]
+extention-pkg-whitelist=pydantic
+doctring-min-length=10
+disable=missing-function-doctring, missing-class-doctring, missing-module-doctring
+[FORMAT]
+good_names=i,j,x,y,id
