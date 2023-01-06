@@ -1,6 +1,6 @@
 from dash import Dash, html
 
-from src.components import nation_dropdown
+from src.components import bar_chart, nation_dropdown
 
 
 def create_layout(app: Dash) -> html.Div:
@@ -12,5 +12,6 @@ def create_layout(app: Dash) -> html.Div:
             html.Div(
                 className="dropdown-container", children=[nation_dropdown.render(app)]
             ),
+            bar_chart.render(app),
         ],
     )

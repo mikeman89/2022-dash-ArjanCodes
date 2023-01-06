@@ -6,7 +6,7 @@ from src.components.layout import create_layout
 
 def main() -> None:
     app = Dash(external_stylesheets=[BOOTSTRAP])
-    app.title = "Metal Dashboard"
+    app.title = "Medal Dashboard"
     app.layout = create_layout(app)
     app.run()
 
