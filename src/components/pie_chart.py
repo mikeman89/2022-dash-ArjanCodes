@@ -10,14 +10,14 @@ from . import ids
 
 def render(app: Dash, data: pd.DataFrame) -> html.Div:
     @app.callback(
-        Output(ids.BAR_CHART, "children"),
+        Output(ids.PIE_CHART, "children"),
         [
             Input(ids.YEAR_DROPDOWN, "value"),
             Input(ids.MONTH_DROPDOWN, "value"),
             Input(ids.CATEGORY_DROPDOWN, "value"),
         ],
     )
-    def update_bar_chart(
+    def update_pie_chart(
         years: list[str], months: list[str], categories: list[str]
     ) -> html.Div:
         filtered_data = data.loc[
@@ -28,21 +28,15 @@ def render(app: Dash, data: pd.DataFrame) -> html.Div:
         if filtered_data.empty:
             return html.Div("No data available")
 
-        def create_pivot_table() -> pd.DataFrame:
-            pt = filtered_data.pivot_table(
-                values=DataSchema.AMOUNT,
-                index=DataSchema.CATEGORY,
-                aggfunc="sum",
-                fill_value=0,
-            )
-            return pt.reset_index().sort_values(by=DataSchema.AMOUNT, ascending=False)
-
-        fig = px.bar(
-            create_pivot_table(),
-            x=DataSchema.CATEGORY,
-            y=DataSchema.AMOUNT,
-            color=DataSchema.CATEGORY,
+        fig = px.pie(
+            data_frame=filtered_data,
+            names=filtered_data[DataSchema.CATEGORY].to_list(),
+            values=filtered_data[DataSchema.AMOUNT].to_list(),
+            hole=0.5,
         )
-        return html.Div(dcc.Graph(figure=fig), id=ids.BAR_CHART)
+        fig.update_layout(margin={"t": 40, "b": 0, "l": 0, "r": 0})
+        fig.update_traces(hovertemplate="%{label}<br>$%{value:.2f}<extra></extra>")
 
-    return html.Div(id=ids.BAR_CHART)
+        return html.Div(dcc.Graph(figure=fig), id=ids.PIE_CHART)
+
+    return html.Div(id=ids.PIE_CHART)
