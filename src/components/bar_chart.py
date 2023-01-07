@@ -11,12 +11,14 @@ from . import ids
 
 
 def render(app: Dash, data: pd.DataFrame) -> html.Div:
-    @callback(
+    @app.callback(
         Output(ids.BAR_CHART, "children"),
-        Input(ids.YEAR_DROPDOWN, "value"),
+        [Input(ids.YEAR_DROPDOWN, "value"), Input(ids.MONTH_DROPDOWN, "value")],
     )
-    def update_bar_chart(years: list[str]) -> html.Div:
-        filtered_data = data.loc[data[DataSchema.DATE].isin(years)]
+    def update_bar_chart(years: list[str], months: list[str]) -> html.Div:
+        filtered_data = data.loc[
+            data[DataSchema.YEAR].isin(years) & data[DataSchema.MONTH].isin(months)
+        ]
         if filtered_data.empty:
             return html.Div("No data available")
 
@@ -24,7 +26,7 @@ def render(app: Dash, data: pd.DataFrame) -> html.Div:
             pt = filtered_data.pivot_table(
                 values=DataSchema.AMOUNT,
                 index=DataSchema.CATEGORY,
-                aggfun="sum",
+                aggfunc="sum",
                 fill_value=0,
             )
             return pt.reset_index().sort_values(by=DataSchema.AMOUNT, ascending=False)
