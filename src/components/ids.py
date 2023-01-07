@@ -1,4 +1,5 @@
 NATION_DROPDOWN = "nation-dropdown"
-SELECT_ALL_NATIONS_BUTTON = "select-all-nations-button"
+SELECT_ALL_YEARS_BUTTON = "select-all-years-button"
+YEAR_DROPDOWN = "year-dropdown"
 
 BAR_CHART = "bar-chart"
