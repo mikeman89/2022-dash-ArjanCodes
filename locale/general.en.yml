@@ -1,7 +1,7 @@
 ---
 en:
   amount: Amount
-  app.title: Financial Dashboard
+  app_title: Financial Dashboard
   category: Category
   hello_world: Hello, World!
   month: Month
