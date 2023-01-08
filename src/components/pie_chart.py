@@ -1,3 +1,4 @@
+import i18n
 import pandas as pd
 import plotly.express as px
 from dash import Dash, dcc, html
@@ -26,7 +27,7 @@ def render(app: Dash, data: pd.DataFrame) -> html.Div:
             & data[DataSchema.CATEGORY].isin(categories)
         ]
         if filtered_data.empty:
-            return html.Div("No data available")
+            return html.Div(i18n.t("general.no_data"))
 
         fig = px.pie(
             data_frame=filtered_data,

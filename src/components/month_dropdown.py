@@ -1,3 +1,4 @@
+import i18n
 import pandas as pd
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
@@ -24,7 +25,7 @@ def render(app: Dash, data: pd.DataFrame) -> html.Div:
 
     return html.Div(
         children=[
-            html.H6("Months"),
+            html.H6(i18n.t("general.month")),
             dcc.Dropdown(
                 multi=True,
                 options=[{"label": month, "value": month} for month in unique_months],
@@ -33,7 +34,7 @@ def render(app: Dash, data: pd.DataFrame) -> html.Div:
             ),
             html.Button(
                 className="dropdown-button",
-                children=["Select All"],
+                children=[i18n.t("general.select_all")],
                 id=ids.SELECT_ALL_MONTHS_BUTTON,
                 n_clicks=0,
             ),
