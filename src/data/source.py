@@ -14,9 +14,9 @@ class DataSource:
 
     def filter(
         self,
-        years: Optional[list[str]],
-        months: Optional[list[str]],
-        categories: Optional[list[str]],
+        years: Optional[list[str]] = None,
+        months: Optional[list[str]] = None,
+        categories: Optional[list[str]] = None,
     ) -> DataSource:
         if years is None:
             years = self.unique_years
@@ -30,6 +30,20 @@ class DataSource:
             & self._data[DataSchema.CATEGORY].isin(categories)
         ]
         return DataSource(filtered_data)
+
+    def create_pivot_table() -> pd.DataFrame:
+        pt = self._data.pivot_table(
+            values=DataSchema.AMOUNT,
+            index=DataSchema.CATEGORY,
+            aggfunc="sum",
+            fill_value=0,
+        )
+        return pt.reset_index().sort_values(by=DataSchema.AMOUNT, ascending=False)
+
+    @property
+    def is_empty(self):
+        if self._data.empty:
+            return True
 
     @property
     def all_years(self) -> list[str]:
@@ -54,3 +68,7 @@ class DataSource:
     @property
     def unique_categories(self) -> list[str]:
         return sorted(set(self.all_categories), key=int)
+
+    @property
+    def all_amounts(self) -> list[str]:
+        return self._data[DataSchema.AMOUNT].tolist()

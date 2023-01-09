@@ -5,11 +5,12 @@ from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 
 from src.data.loader import DataSchema
+from src.data.source import DataSource
 
 from . import ids
 
 
-def render(app: Dash, data: pd.DataFrame) -> html.Div:
+def render(app: Dash, source: DataSource) -> html.Div:
     @app.callback(
         Output(ids.BAR_CHART, "children"),
         [
@@ -21,25 +22,12 @@ def render(app: Dash, data: pd.DataFrame) -> html.Div:
     def update_bar_chart(
         years: list[str], months: list[str], categories: list[str]
     ) -> html.Div:
-        filtered_data = data.loc[
-            data[DataSchema.YEAR].isin(years)
-            & data[DataSchema.MONTH].isin(months)
-            & data[DataSchema.CATEGORY].isin(categories)
-        ]
-        if filtered_data.empty:
+        filtered_data = source.filter(years, months, categories)
+        if filtered_data.is_empty:
             return html.Div(i18n.t("general.no_data"))
 
-        def create_pivot_table() -> pd.DataFrame:
-            pt = filtered_data.pivot_table(
-                values=DataSchema.AMOUNT,
-                index=DataSchema.CATEGORY,
-                aggfunc="sum",
-                fill_value=0,
-            )
-            return pt.reset_index().sort_values(by=DataSchema.AMOUNT, ascending=False)
-
         fig = px.bar(
-            create_pivot_table(),
+            filtered_data.create_pivot_table(),
             x=DataSchema.CATEGORY,
             y=DataSchema.AMOUNT,
             color=DataSchema.CATEGORY,

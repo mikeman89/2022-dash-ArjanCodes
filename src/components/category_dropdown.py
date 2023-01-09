@@ -4,13 +4,13 @@ from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 
 from src.data.loader import DataSchema
+from src.data.source import DataSource
 
 from . import ids
 
 
-def render(app: Dash, data: pd.DataFrame) -> html.Div:
-    all_categories: list[str] = data[DataSchema.CATEGORY].tolist()
-    unique_categories = sorted(set(all_categories))
+def render(app: Dash, source: DataSource) -> html.Div:
+    source.unique_categories
 
     @app.callback(
         Output(ids.CATEGORY_DROPDOWN, "value"),
@@ -21,10 +21,7 @@ def render(app: Dash, data: pd.DataFrame) -> html.Div:
         ],
     )
     def update_months(years: list[str], months: list[str], _: int) -> list[str]:
-        filtered_data = data.loc[
-            data[DataSchema.YEAR].isin(years) & data[DataSchema.MONTH].isin(months)
-        ]
-        return sorted(set(filtered_data[DataSchema.CATEGORY].tolist()))
+        return source.filter(years=years, months=months).unique_categories
 
     return html.Div(
         children=[
@@ -33,10 +30,10 @@ def render(app: Dash, data: pd.DataFrame) -> html.Div:
                 multi=True,
                 options=[
                     {"label": category, "value": category}
-                    for category in unique_categories
+                    for category in source.unique_categories
                 ],
                 id=ids.CATEGORY_DROPDOWN,
-                value=unique_categories,
+                value=source.unique_categories,
             ),
             html.Button(
                 className="dropdown-button",

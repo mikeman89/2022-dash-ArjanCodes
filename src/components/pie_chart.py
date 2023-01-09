@@ -1,3 +1,5 @@
+from calendar import month
+
 import i18n
 import pandas as pd
 import plotly.express as px
@@ -5,11 +7,12 @@ from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 
 from src.data.loader import DataSchema
+from src.data.source import DataSource
 
 from . import ids
 
 
-def render(app: Dash, data: pd.DataFrame) -> html.Div:
+def render(app: Dash, source: DataSource) -> html.Div:
     @app.callback(
         Output(ids.PIE_CHART, "children"),
         [
@@ -21,18 +24,14 @@ def render(app: Dash, data: pd.DataFrame) -> html.Div:
     def update_pie_chart(
         years: list[str], months: list[str], categories: list[str]
     ) -> html.Div:
-        filtered_data = data.loc[
-            data[DataSchema.YEAR].isin(years)
-            & data[DataSchema.MONTH].isin(months)
-            & data[DataSchema.CATEGORY].isin(categories)
-        ]
-        if filtered_data.empty:
+        filtered_data = source.filter(years, months, categories)
+        if filtered_data.is_empty:
             return html.Div(i18n.t("general.no_data"))
 
         fig = px.pie(
             data_frame=filtered_data,
-            names=filtered_data[DataSchema.CATEGORY].to_list(),
-            values=filtered_data[DataSchema.AMOUNT].to_list(),
+            names=filtered_data.all_categories,
+            values=filtered_data.all_amounts,
             hole=0.5,
         )
         fig.update_layout(margin={"t": 40, "b": 0, "l": 0, "r": 0})
