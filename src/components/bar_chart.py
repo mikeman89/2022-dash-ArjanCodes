@@ -43,6 +43,10 @@ def render(app: Dash, data: pd.DataFrame) -> html.Div:
             x=DataSchema.CATEGORY,
             y=DataSchema.AMOUNT,
             color=DataSchema.CATEGORY,
+            labels={
+                DataSchema.CATEGORY: i18n.t("general.category"),
+                DataSchema.AMOUNT: i18n.t("general.amount"),
+            },
         )
         fig.update_traces(hovertemplate="%{x}<br>$%{y:.2f}<extra></extra>")
         return html.Div(dcc.Graph(figure=fig), id=ids.BAR_CHART)

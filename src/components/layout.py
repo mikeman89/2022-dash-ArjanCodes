@@ -1,13 +1,8 @@
 import pandas as pd
 from dash import Dash, html
 
-from src.components import (
-    bar_chart,
-    category_dropdown,
-    month_dropdown,
-    pie_chart,
-    year_dropdown,
-)
+from src.components import (bar_chart, category_dropdown, month_dropdown,
+                            pie_chart, year_dropdown)
 
 
 def create_layout(app: Dash, data: pd.DataFrame) -> html.Div:
