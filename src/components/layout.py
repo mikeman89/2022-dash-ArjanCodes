@@ -1,4 +1,3 @@
-import pandas as pd
 from dash import Dash, html
 
 from src.components import (

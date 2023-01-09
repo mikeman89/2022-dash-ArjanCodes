@@ -31,7 +31,7 @@ class DataSource:
         ]
         return DataSource(filtered_data)
 
-    def create_pivot_table() -> pd.DataFrame:
+    def create_pivot_table(self) -> pd.DataFrame:
         pt = self._data.pivot_table(
             values=DataSchema.AMOUNT,
             index=DataSchema.CATEGORY,
@@ -59,7 +59,7 @@ class DataSource:
 
     @property
     def unique_months(self) -> list[str]:
-        return sorted(set(self.all_months), key=int)
+        return sorted(set(self.all_months))
 
     @property
     def all_categories(self) -> list[str]:
@@ -67,8 +67,13 @@ class DataSource:
 
     @property
     def unique_categories(self) -> list[str]:
-        return sorted(set(self.all_categories), key=int)
+        return sorted(set(self.all_categories))
 
     @property
     def all_amounts(self) -> list[str]:
         return self._data[DataSchema.AMOUNT].tolist()
+
+    @property
+    def data(self) -> pd.DataFrame:
+        data = self._data.copy()
+        return data

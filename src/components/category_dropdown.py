@@ -1,9 +1,7 @@
 import i18n
-import pandas as pd
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 
-from src.data.loader import DataSchema
 from src.data.source import DataSource
 
 from . import ids

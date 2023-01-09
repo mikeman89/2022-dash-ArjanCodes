@@ -1,12 +1,10 @@
 from calendar import month
 
 import i18n
-import pandas as pd
 import plotly.express as px
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 
-from src.data.loader import DataSchema
 from src.data.source import DataSource
 
 from . import ids
@@ -29,7 +27,7 @@ def render(app: Dash, source: DataSource) -> html.Div:
             return html.Div(i18n.t("general.no_data"))
 
         fig = px.pie(
-            data_frame=filtered_data,
+            data_frame=filtered_data.data,
             names=filtered_data.all_categories,
             values=filtered_data.all_amounts,
             hole=0.5,
