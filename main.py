@@ -12,7 +12,7 @@ LOCALE = "en"
 def main() -> None:
     i18n.set("locale", LOCALE)
     i18n.load_path.append("locale")
-    data = load_transaction_data(DATA_PATH)
+    data = load_transaction_data(DATA_PATH, LOCALE)
     app = Dash(external_stylesheets=[BOOTSTRAP])
     app.title = i18n.t("general.app_title")
     app.layout = create_layout(app, data)
