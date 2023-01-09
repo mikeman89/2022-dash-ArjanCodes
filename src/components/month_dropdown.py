@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Optional, Protocol
+
 import i18n
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
@@ -7,7 +11,21 @@ from src.data.source import DataSource
 from . import ids
 
 
-def render(app: Dash, source: DataSource) -> html.Div:
+class MonthsDataSource(Protocol):
+    def filter(
+        self,
+        years: Optional[list[str]] = None,
+        months: Optional[list[str]] = None,
+        categories: Optional[list[str]] = None,
+    ) -> MonthsDataSource:
+        ...
+
+    @property
+    def unique_months(self) -> list[str]:
+        ...
+
+
+def render(app: Dash, source: MonthsDataSource) -> html.Div:
     @app.callback(
         Output(ids.MONTH_DROPDOWN, "value"),
         [

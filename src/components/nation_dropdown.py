@@ -1,7 +1,15 @@
+from typing import Protocol
+
 from dash import Dash, dcc, html
 from dash.dependencies import Input, Output
 
 from . import ids
+
+
+class YearsDataSource(Protocol):
+    @property
+    def unique_years(self) -> list[str]:
+        ...
 
 
 def render(app: Dash) -> html.Div:
