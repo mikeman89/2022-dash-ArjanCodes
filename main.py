@@ -1,5 +1,5 @@
 import i18n
-from dash import Dash, html
+from dash import Dash
 from dash_bootstrap_components.themes import BOOTSTRAP
 
 from src.components.layout import create_layout
